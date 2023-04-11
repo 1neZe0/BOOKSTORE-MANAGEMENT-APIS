@@ -1,0 +1,30 @@
+version: "3.5"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_USER: "user"
+      POSTGRES_DB: "dbska"
+    ports:
+      - "1234:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9010:9010"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: user
+      DB_PASSWORD: root
+      DB_NAME: main
+
+volumes:
+  db-data:
